@@ -65,6 +65,7 @@ class MicrophoneStream(object):
             # This is necessary so that the input device's buffer doesn't
             # overflow while the calling thread makes network requests, etc.
             stream_callback=self._fill_buffer,
+            #input_device_index = 4,  # hack
         )
 
         self.closed = False
@@ -145,18 +146,19 @@ def listen_print_loop(responses):
         overwrite_chars = ' ' * (num_chars_printed - len(transcript))
 
         if not result.is_final:
-            sys.stdout.write(transcript + overwrite_chars + '\r')
-            sys.stdout.flush()
-
+            print >> sys.stderr, transcript + overwrite_chars + '\r',
             num_chars_printed = len(transcript)
 
         else:
-            print(transcript + overwrite_chars)
+            print >> sys.stderr, transcript + overwrite_chars
+            print >> sys.stderr, "[" + transcript + "]"
+            print(transcript)
+            sys.stdout.flush()
 
             # Exit recognition if any of the transcribed phrases could be
             # one of our keywords.
             if re.search(r'\b(exit|quit)\b', transcript, re.I):
-                print('Exiting..')
+                print >> sys.stderr, 'Exiting..'
                 break
 
             num_chars_printed = 0

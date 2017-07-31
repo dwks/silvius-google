@@ -89,6 +89,16 @@ class CoreParser(GenericParser):
             _number ::= seven
             _number ::= eight
             _number ::= nine
+            number ::= 0
+            number ::= 1
+            number ::= 2
+            number ::= 3
+            number ::= 4
+            number ::= 5
+            number ::= 6
+            number ::= 7
+            number ::= 8
+            number ::= 9
         '''
         # doesn't work right now
         #for v in value:
@@ -103,7 +113,17 @@ class CoreParser(GenericParser):
             'six'   : 6,
             'seven' : 7,
             'eight' : 8,
-            'nine'  : 9
+            'nine'  : 9,
+            '0': 0,
+            '1': 1,
+            '2': 2,
+            '3': 3,
+            '4': 4,
+            '5': 5,
+            '6': 6,
+            '7': 7,
+            '8': 8,
+            '9': 9
         }
         return value[args[0].type]
 
@@ -167,8 +187,12 @@ class CoreParser(GenericParser):
             character ::= carrot
             character ::= ampersand
             character ::= star
-            character ::= late
-            character ::= rate
+            character ::= len
+            character ::= wren
+            character ::= lace
+            character ::= race
+            character ::= lack
+            character ::= rack
             character ::= minus
             character ::= underscore
             character ::= plus
@@ -195,8 +219,12 @@ class CoreParser(GenericParser):
             'carrot': 'caret',
             'ampersand': 'ampersand',
             'star': 'asterisk',
-            'late': 'parenleft',
-            'rate': 'parenright',
+            'len': 'parenleft',
+            'wren': 'parenright',
+            'lace': 'braceleft',
+            'race': 'braceright',
+            'lack': 'bracketleft',
+            'rack': 'bracketright',
             'minus': 'minus',
             'underscore': 'underscore',
             'plus': 'plus',

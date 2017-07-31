@@ -7,20 +7,6 @@ def find_keywords(parser):
     global keywords
     keywords = get_terminals(parser)
 
-keywords += [
-    'double',
-    'single',
-    'quote',
-    'colon',
-    'len',
-    'wren',
-    'lace',
-    'race',
-    'lack',
-    'rack',
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
-]
-
 class Token:
     def __init__(self, type, wordno=-1, extra=''):
         self.type = type

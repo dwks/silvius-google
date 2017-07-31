@@ -89,16 +89,16 @@ class CoreParser(GenericParser):
             _number ::= seven
             _number ::= eight
             _number ::= nine
-            number ::= 0
-            number ::= 1
-            number ::= 2
-            number ::= 3
-            number ::= 4
-            number ::= 5
-            number ::= 6
-            number ::= 7
-            number ::= 8
-            number ::= 9
+            _number ::= 0
+            _number ::= 1
+            _number ::= 2
+            _number ::= 3
+            _number ::= 4
+            _number ::= 5
+            _number ::= 6
+            _number ::= 7
+            _number ::= 8
+            _number ::= 9
         '''
         # doesn't work right now
         #for v in value:

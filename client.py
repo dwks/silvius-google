@@ -169,11 +169,18 @@ def main():
     # for a list of supported languages.
     language_code = 'en-US'  # a BCP-47 language tag
 
+    phrases = []
+    if len(sys.argv) > 1:
+        with open(sys.argv[1]) as f:
+            phrases = f.read().splitlines()
+
     client = speech.SpeechClient()
+    speech_context = types.SpeechContext(phrases=phrases)
     config = types.RecognitionConfig(
         encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=RATE,
-        language_code=language_code)
+        language_code=language_code,
+        speech_contexts=[ speech_context ])
     streaming_config = types.StreamingRecognitionConfig(
         config=config,
         interim_results=True)

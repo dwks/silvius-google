@@ -34,6 +34,7 @@ import sys
 from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
+import grpc
 import pyaudio
 from six.moves import queue
 # [END import_libraries]
@@ -66,6 +67,8 @@ class MicrophoneStream(object):
             # overflow while the calling thread makes network requests, etc.
             stream_callback=self._fill_buffer,
             #input_device_index = 4,  # hack
+            #input_device_index = 12,  # hack
+            input_device_index = 14,  # hack
         )
 
         self.closed = False
@@ -162,17 +165,13 @@ def listen_print_loop(responses):
                 break
 
             num_chars_printed = 0
+            return  # restart to avoid deadline expiry
 
 
-def main():
+def run_loop(phrases):
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = 'en-US'  # a BCP-47 language tag
-
-    phrases = []
-    if len(sys.argv) > 1:
-        with open(sys.argv[1]) as f:
-            phrases = f.read().splitlines()
 
     client = speech.SpeechClient()
     speech_context = types.SpeechContext(phrases=phrases)
@@ -186,14 +185,29 @@ def main():
         interim_results=True)
 
     with MicrophoneStream(RATE, CHUNK) as stream:
-        audio_generator = stream.generator()
-        requests = (types.StreamingRecognizeRequest(audio_content=content)
-                    for content in audio_generator)
+        while True:
+            try:
+                print "running a recognition..."
+                audio_generator = stream.generator()
+                requests = (types.StreamingRecognizeRequest(audio_content=content)
+                            for content in audio_generator)
 
-        responses = client.streaming_recognize(streaming_config, requests)
+                responses = client.streaming_recognize(streaming_config, requests)
 
-        # Now, put the transcription responses to use.
-        listen_print_loop(responses)
+                # Now, put the transcription responses to use.
+                listen_print_loop(responses)
+            except grpc._channel._Rendezvous as e:
+                print "timeout, restarting"
+                pass
+
+
+def main():
+    phrases = []
+    if len(sys.argv) > 1:
+        with open(sys.argv[1]) as f:
+            phrases = f.read().splitlines()
+
+    run_loop(phrases)
 
 
 if __name__ == '__main__':

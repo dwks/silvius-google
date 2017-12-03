@@ -68,7 +68,7 @@ class MicrophoneStream(object):
             stream_callback=self._fill_buffer,
             #input_device_index = 4,  # hack
             #input_device_index = 12,  # hack
-            input_device_index = 14,  # hack
+            input_device_index = 7,  # hack
         )
 
         self.closed = False
